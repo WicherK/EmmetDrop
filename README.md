@@ -1,2 +1,2 @@
 # EmmetDrop
- AirDrop alternative
+ Air Drop alternative
