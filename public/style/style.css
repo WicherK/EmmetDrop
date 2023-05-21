@@ -1,0 +1,418 @@
+body
+{
+    font-family: 'Rubik', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    user-select: none;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.mdi
+{
+    pointer-events: none;
+}
+
+.mdi-bluetooth, .mdi-wifi, .mdi-web
+{
+    padding-right: 5px;
+    margin-left: 20px;
+    font-size: 21px;
+}
+
+.mdi-checkbox-blank-outline, .mdi-checkbox-marked
+{
+    margin-left: 0;
+    margin-right: 5px;
+    font-size: 21px;
+}
+
+.menu-button
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    font-size: 40px;
+    right: 0;
+    margin: 10px;
+    margin-right: 15px;
+    z-index: 0;
+    border-radius: 100%;
+    padding-left: 5px;
+    padding-right: 5px;
+    transition: all ease-in-out 0.2s;
+}
+
+.menu-button:hover
+{
+    background-color: rgb(207, 207, 207);
+}
+
+.curtain
+{
+    width: 100%;
+    height: 100vh;
+    position: absolute;
+    background-color: rgba(0, 0, 0);
+    z-index: 1;
+    transition: all ease-in-out 0.2s;
+    opacity: 0.34;
+}
+
+.menu
+{
+    position: absolute;
+    right: 0;
+    background-color: white;
+    height: 100vh;
+    width: 25%;
+    z-index: 2;
+    opacity: 0;
+    transition: all ease-in-out 0.2s;
+}
+
+.file-history-header
+{
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 300;
+    padding: 15px;
+}
+
+.mdi-history
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 8px;
+    font-size: 30px;
+}
+
+.file-list
+{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.list-file
+{
+    width: 92%;
+    max-height: 60px;
+    padding: 0 !important;
+    margin-top: 10px !important;
+}
+
+.list-file .file-info
+{
+    width: 100%;
+}
+
+.list-file:hover
+{
+    cursor: pointer;
+    background-color: whitesmoke;
+}
+
+.file-download
+{
+    font-size: 28px;
+    margin-left: 15px;
+    margin-right: 20px;
+}
+
+.app
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.app-header
+{
+    font-size: 40px;
+    font-weight: 300;
+    margin-top: 80px;
+}
+
+.qr
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.qr-header
+{
+    font-size: 21px;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+
+.sharelink
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.sharelink-header
+{
+    font-size: 21px;
+    font-weight: 300;
+}
+
+.link-wrapper
+{
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    max-height: 45px;
+}
+
+.link
+{
+    padding: 13px;
+    font-size: 14px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    width: 250px;
+    outline: none;
+    border: 1px solid rgb(184, 184, 184);
+    color: gray;
+    border-right: 0;
+}
+
+.link-button
+{
+    min-width: 110px;
+    padding: 13px;
+    font-size: 14px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    outline: none;
+    border: 1px solid rgb(184, 184, 184);
+    color: rgb(59, 59, 59);
+    transition: all ease-in-out 0.2s;
+}
+
+.link-button:hover
+{
+    cursor: pointer;
+    background-color: rgb(218, 218, 218);
+}
+
+.devices
+{
+    margin-top: 50px;
+}
+
+.devices-header
+{
+    text-align: center;
+    font-size: 21px;
+    font-weight: 300;
+}
+
+.device-list
+{
+    margin-top: 20px;
+}
+
+.device
+{
+    max-width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    font-size: 18px;
+    font-weight: 300;
+    padding: 15px;
+    border-top: 1px solid rgb(184, 184, 184);
+    z-index: 1000;
+}
+
+.device:first-child
+{
+    border: none;
+}
+
+.device:hover
+{
+    cursor: pointer;
+    background-color: rgb(231, 231, 231);
+}
+
+.file
+{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-right: 100px;
+    margin-top: 30px;
+    border: 1px solid rgb(158, 158, 158);
+    border-radius: 5px;
+    min-width: 200px;
+}
+
+.file-icon
+{
+    font-size: 38px;
+    padding: 10px;
+}
+
+.file-info
+{
+    padding: 5px;
+}
+
+.file-name
+{
+    font-size: 16px;
+}
+
+.file-size
+{
+    font-size: 13px;
+}
+
+.file-progress
+{
+    width: 100%;
+    border-radius: 50%;
+    height: 2px;
+    background-color: rgb(223, 223, 223);
+    margin-top: 6px;
+}
+
+.actual-file-progress
+{
+    width: 65%;
+    border-radius: 50%;
+    height: 2px;
+    background-color: rgb(152, 211, 63);
+    margin-top: 6px;
+}
+
+.upload-widgets
+{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.upload-button
+{
+    padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: 15px;
+    color: white;
+    background-color: rgba(75, 75, 75, 0.9);
+    border: none;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 300;
+    border-radius: 5px;
+    transition: all ease-in-out 0.2s;
+}
+
+.upload-button:hover
+{
+    cursor: pointer;
+    background-color: rgba(75, 75, 75, 0.80);
+}
+
+.upload-cancel
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border: none;
+    color: white;
+    background-color: rgb(231, 107, 107);
+    border-radius: 5px;
+    font-size: 21px;
+    padding: 10px;
+    margin-left: 10px;
+    transition: all ease-in-out 0.2s;
+}
+
+.upload-cancel:hover
+{
+    cursor: pointer;
+    background-color: rgb(199, 85, 85);
+}
+
+.link-related
+{
+    flex: 1 1 0px;
+    margin-top: 35px;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+.separator
+{
+    font-size: 24px;
+    font-weight: 300;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+@media only screen and (max-width: 1100px) 
+{
+    .menu
+    {
+        width: 40%;
+    }
+}
+
+@media only screen and (max-width: 640px) 
+{
+    body
+    {
+        margin: 0;
+    }
+
+    .menu
+    {
+        width: 70%;
+    }
+
+    body, .app, .link-related, .sharelink, .link-wrapper 
+    {
+        width: 100%;
+    }
+
+    .app-header
+    {
+        margin-top: 30px;
+        font-size: 30px;
+    }
+
+    .link-related
+    {
+        flex-direction: column;
+    }
+
+    .link
+    {
+        width: 60%;
+    }
+
+    .separator
+    {
+        margin: 20px;
+    }
+
+    .devices
+    {
+        margin-top: 30px;
+    }
+}

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0">
+    <link rel="stylesheet" href="/style/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Rubik:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <title>Emmet Drop - File transfer app</title>
+</head>
+
+<body>
+    <div class="menu-button"><span class="mdi mdi-menu"></span></div>
+    <div class="curtain"></div>
+    <div class="menu">
+        <div class="file-history">
+            <div class="file-history-header"><span class="mdi mdi-history"></span>Files history</div>
+            <div class="file-list">
+                <div class="file list-file">
+                    <div class="file-icon">
+                        <span class="mdi mdi-file-outline"></span>
+                    </div>
+                    <div class="file-info">
+                        <div class="file-name">Testowy_plik.txt</div>
+                        <div class="file-size">12.5KB</div>
+                        <div class="file-progress">
+                            <div class="actual-file-progress"></div>
+                        </div>
+                    </div>
+                    <div class="file-download">
+                        <span class="mdi mdi-download"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="app">
+        <div class="app-header">Emmet Drop</div>
+        <div class="link-related">
+            <div class="qr link-related-item">
+                <div class="qr-header">Scan QR</div>
+                <img src="/images/code.jpg" width="128" height="128">
+            </div>
+            <div class="separator">or</div>
+            <div class="sharelink link-related-item">
+                <div class="sharelink-header">Link to share</div>
+                <div class="link-wrapper">
+                    <input class="link" type="text" value="" readonly>
+                    <button class="link-button">Copy Link<span class="mdi mdi-clipboard-multiple"
+                            style="padding-left: 5px;"></span></button>
+                </div>
+            </div>
+        </div>
+        <div class="devices">
+            <div class="devices-header">Available devices</div>
+            <div class="device-list"></div>
+        </div>
+        <input type="file" id="FILE" hidden>
+        <div class="upload-widgets">
+            <button class="upload-button">Choose File</button>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let devices = document.getElementsByClassName('device');
+        let copyLinkButton = document.getElementsByClassName('link-button')[0];
+        let copyLinkTimer;
+
+        let checkMode = false;
+        let pressDuration;
+        //Check duration for press on device to go to check mode
+        let checkDuration = 1000;
+
+        let checkedList = []; //Checked devices list
+
+        AssignDeviceListeners();
+
+        //Turn off checkmode
+        document.addEventListener("click", (e) => {
+            if (checkMode && (e.target.className != "device" && e.target.tagName != "BUTTON" && e.target.tagName != "INPUT")) {
+                checkMode = false;
+                Array.from(devices).forEach((device) => {
+                    device.removeChild(device.childNodes[0]);
+                    checkedList = [];
+                })
+            }
+        });
+
+        copyLinkButton.addEventListener('click', CopyLink);
+
+        function CopyLink(e)
+        {
+            clearTimeout(copyLinkTimer);
+
+            navigator.clipboard.writeText(window.location.href);
+
+            e.target.style.transition = 'none';
+            e.target.style.transition = 'background-color ease-in-out 0.1s';
+            e.target.style.color = 'white';
+            e.target.style.backgroundColor = '#5ED865';
+            e.target.style.borderColor = '#5ED865';
+            e.target.style.padding = '0';
+            e.target.style.paddingTop = '2px';
+            e.target.style.fontSize = '22px';
+            e.target.innerHTML = '<span class="mdi mdi-check-bold"></span>';
+
+            copyLinkTimer = setTimeout(() => {
+                e.target.style.transition = 'background-color color ease-in-out 0.2s';
+                e.target.style.color = 'black';
+                e.target.style.backgroundColor = 'buttonface';
+                e.target.style.border = '1px solid rgb(184, 184, 184)';
+                e.target.style.padding = '13px';
+                e.target.style.fontSize = '14px';
+                e.target.innerHTML = 'Copy Link<span class="mdi mdi-clipboard-multiple" style="padding-left: 5px;"></span>';
+            }, 2500)
+        }
+
+        function AssignDeviceListeners() {
+            //Check press
+            Array.from(devices).forEach((e) => {
+                CheckDivPressDuration(e);
+            })
+
+            //Set multiple choices
+            Array.from(devices).forEach((e) => {
+                e.addEventListener('click', CheckDevice);
+            })
+        }
+
+        function CheckDivPressDuration(divElement) {
+            let pressStartTime;
+            let pressIntervalId;
+
+            function HandleMouseDown() {
+                pressStartTime = Date.now();
+                pressIntervalId = setInterval(CheckPressDuration, 100);
+            }
+
+            function HandleMouseUp(e) {
+                pressDuration = Date.now() - pressStartTime;
+                clearInterval(pressIntervalId);
+                pressStartTime = undefined;
+            }
+
+            function ResetDuration() {
+                clearInterval(pressIntervalId);
+                pressStartTime = undefined;
+            }
+
+            function CheckPressDuration() {
+                if (pressStartTime) {
+                    const pressDuration = Date.now() - pressStartTime;
+                    if (pressDuration >= checkDuration) {
+                        if (!checkMode) {
+                            Array.from(devices).forEach((e) => {
+                                let checkbox = document.createElement("i");
+                                checkbox.className = "mdi mdi-checkbox-blank-outline";
+                                e.prepend(checkbox);
+                            })
+                            checkMode = true;
+                        }
+                    }
+                }
+            }
+
+            divElement.addEventListener("mouseleave", ResetDuration);
+            divElement.addEventListener("mousedown", HandleMouseDown);
+            divElement.addEventListener("mouseup", HandleMouseUp);
+        }
+
+        function CheckDevice(e) {
+            if (checkMode && pressDuration < checkDuration) {
+                if (!checkedList.includes(e.target.id)) {
+                    e.target.childNodes[0].className = "mdi mdi-checkbox-marked";
+                    checkedList.push(e.target.id);
+                }
+                else {
+                    e.target.childNodes[0].className = "mdi mdi-checkbox-blank-outline";
+                    checkedList.splice(checkedList.indexOf(e.target.id), 1);
+                }
+            }
+            console.log(checkedList);
+        }
+
+        //Menu
+        let isMenuOpen = true;
+        document.getElementsByClassName("curtain")[0].style.display = "none";
+        document.getElementsByClassName("menu")[0].style.right = "-" + document.getElementsByClassName("menu")[0].scrollWidth + "px";
+
+        document.getElementsByClassName('menu-button')[0].addEventListener('click', () => {
+            OpenMenu();
+        })
+
+        document.getElementsByClassName('curtain')[0].addEventListener('click', () => {
+            CloseMenu();
+        })
+
+        window.addEventListener('resize', () => {
+            if (!isMenuOpen)
+                document.getElementsByClassName("menu")[0].style.right = "-" + document.getElementsByClassName("menu")[0].scrollWidth + "px";
+        })
+
+        function OpenMenu() {
+            isMenuOpen = true;
+            document.getElementsByClassName("curtain")[0].style.display = "block";
+            document.getElementsByClassName("menu")[0].style.opacity = "1";
+            document.getElementsByClassName("menu")[0].style.transition = "all ease-in-out 0.2s";
+            document.getElementsByClassName("menu")[0].style.right = "0px";
+        }
+
+        function CloseMenu() {
+            if (isMenuOpen) {
+                document.getElementsByClassName("curtain")[0].style.display = "none";
+                document.getElementsByClassName("menu")[0].style.right = "-" + document.getElementsByClassName("menu")[0].scrollWidth + "px";
+                isMenuOpen = false;
+            }
+        }
+
+        //Upload file
+        let files = null;
+        let canUpload = false;
+        let uploadButton = document.getElementsByClassName("upload-button")[0];
+        let fileInput = document.getElementById('FILE');
+
+        uploadButton.addEventListener('click', () => {
+            if (canUpload) {
+                //Send file to chosen users
+                Upload(files);
+            }
+            else
+                fileInput.click();
+        })
+
+        fileInput.addEventListener('change', (e) => {
+            files = fileInput.files;
+
+            if (files != null) {
+                canUpload = true;
+                document.getElementsByClassName("app")[0].insertBefore(PresentFile(files[0].name, files[0].size), document.getElementsByClassName("upload-widgets")[0]);
+                uploadButton.innerHTML = "Send file";
+            }
+        })
+
+        function PresentFile(name, size) {
+            //Main file element
+            let fileElement = document.createElement('div');
+            fileElement.className = 'file';
+
+            //File icon
+            let fileIcon = document.createElement('div');
+            fileIcon.className = 'file-icon';
+            let icon = document.createElement('span');
+            icon.className = 'mdi mdi-file-outline';
+
+            //File info
+            let fileInfo = document.createElement('div');
+            fileInfo.className = 'file-info';
+
+            let fileName = document.createElement('div');
+            fileName.className = "file-name";
+            fileName.innerHTML = name;
+
+            let fileSize = document.createElement('div');
+            fileSize.className = 'file-size';
+            fileSize.innerHTML = FormatBytes(size);
+
+            //Build file element
+            fileIcon.appendChild(icon);
+            fileInfo.appendChild(fileName);
+            fileInfo.appendChild(fileSize);
+
+            fileElement.appendChild(fileIcon);
+            fileElement.appendChild(fileInfo);
+
+            return fileElement;
+        }
+
+        function FormatBytes(bytes) {
+            const units = ['bytes', 'KB', 'MB', 'GB', 'TB'];
+            let size = bytes;
+            let unitIndex = 0;
+
+            while (size >= 1024 && unitIndex < units.length - 1) {
+                size /= 1024;
+                unitIndex++;
+            }
+
+            return `${size.toFixed(2)} ${units[unitIndex]}`;
+        }
+
+        //File history
+        let fileBuffersHistory = [];
+
+    </script>
+    <script>
+        const socket = io();
+
+        let roomId = "<%=roomId%>";
+
+        let link = document.getElementsByClassName('link')[0];
+        let deviceList = document.getElementsByClassName('device-list')[0];
+
+        //If roomId hasn't been passed it means you are creating the room
+        if (roomId.length < 8)
+            socket.emit('createRoom');
+        else
+            socket.emit('joinRoom', { roomId: roomId });
+
+        socket.on('createRoomCallback', (msg) => {
+            window.history.replaceState(null, null, "/c/" + msg.roomId); //Change url only visually in browser
+            link.value = window.location.href;
+        })
+
+        socket.on('joinRoomCallback', (msg) => {
+            let socketsInRoom = msg.socketsInRoom;
+
+            link.value = window.location.href;
+
+            deviceList.innerHTML = '';
+            Array.from(socketsInRoom).forEach((socketId) => {
+                if (socketId != socket.id)
+                    deviceList.appendChild(PresentDevice(socketId, 'web'));
+            })
+            AssignDeviceListeners();
+        })
+
+        socket.on('receiveFile', (msg) => {
+            const blob = new Blob([msg.file]);
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = msg.name;
+            link.click();
+
+            URL.revokeObjectURL(url);
+
+            fileBuffersHistory.push(msg);
+        })
+
+        function Upload(files) {
+            socket.emit("upload", { file: files[0], name: files[0].name, deviceList: checkedList });
+        }
+
+        function PresentDevice(socketId, icon) {
+            let deviceElement = document.createElement('div');
+            deviceElement.className = 'device';
+            deviceElement.id = socketId;
+
+            let iconElement = document.createElement('span');
+            iconElement.className = `mdi mdi-${icon}`;
+
+            deviceElement.appendChild(iconElement);
+            deviceElement.innerHTML += socketId;
+
+            return deviceElement;
+        }
+    </script>
+</body>
+
+</html>
