@@ -22,23 +22,7 @@
     <div class="menu">
         <div class="file-history">
             <div class="file-history-header"><span class="mdi mdi-history"></span>Files history</div>
-            <div class="file-list">
-                <div class="file list-file">
-                    <div class="file-icon">
-                        <span class="mdi mdi-file-outline"></span>
-                    </div>
-                    <div class="file-info">
-                        <div class="file-name">Testowy_plik.txt</div>
-                        <div class="file-size">12.5KB</div>
-                        <div class="file-progress">
-                            <div class="actual-file-progress"></div>
-                        </div>
-                    </div>
-                    <div class="file-download">
-                        <span class="mdi mdi-download"></span>
-                    </div>
-                </div>
-            </div>
+            <div class="file-list"></div>
         </div>
     </div>
     <div class="app">
@@ -95,8 +79,7 @@
 
         copyLinkButton.addEventListener('click', CopyLink);
 
-        function CopyLink(e)
-        {
+        function CopyLink(e) {
             clearTimeout(copyLinkTimer);
 
             navigator.clipboard.writeText(window.location.href);
@@ -248,10 +231,10 @@
             }
         })
 
-        function PresentFile(name, size) {
+        function PresentFile(name, size, isHistory = false, sent = null) {
             //Main file element
             let fileElement = document.createElement('div');
-            fileElement.className = 'file';
+            fileElement.className = isHistory ? 'file list-file' : 'file';
 
             //File icon
             let fileIcon = document.createElement('div');
@@ -271,6 +254,13 @@
             fileSize.className = 'file-size';
             fileSize.innerHTML = FormatBytes(size);
 
+            //Icon for identyfing was file downloaded or sent
+            let fileDownloadElement = document.createElement('div');
+            if (isHistory && sent != null) {
+                fileDownloadElement.className = 'file-download';
+                fileDownloadElement.innerHTML = sent == true ? '<span class="mdi mdi-upload"></span>' : '<span class="mdi mdi-download"></span>';
+            }
+
             //Build file element
             fileIcon.appendChild(icon);
             fileInfo.appendChild(fileName);
@@ -278,6 +268,9 @@
 
             fileElement.appendChild(fileIcon);
             fileElement.appendChild(fileInfo);
+
+            if (sent != null)
+                fileElement.appendChild(fileDownloadElement);
 
             return fileElement;
         }
@@ -294,10 +287,6 @@
 
             return `${size.toFixed(2)} ${units[unitIndex]}`;
         }
-
-        //File history
-        let fileBuffersHistory = [];
-
     </script>
     <script>
         const socket = io();
@@ -306,6 +295,7 @@
 
         let link = document.getElementsByClassName('link')[0];
         let deviceList = document.getElementsByClassName('device-list')[0];
+        let fileHistoryList = document.getElementsByClassName('file-list')[0];
 
         //If roomId hasn't been passed it means you are creating the room
         if (roomId.length < 8)
@@ -332,21 +322,33 @@
         })
 
         socket.on('receiveFile', (msg) => {
-            const blob = new Blob([msg.file]);
-            const url = URL.createObjectURL(blob);
-
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = msg.name;
-            link.click();
-
-            URL.revokeObjectURL(url);
-
-            fileBuffersHistory.push(msg);
+            console.log('received');
+            AddFileToHistory(msg, false);
         })
 
         function Upload(files) {
-            socket.emit("upload", { file: files[0], name: files[0].name, deviceList: checkedList });
+            let file = { file: files[0], name: files[0].name, size: files[0].size, deviceList: checkedList };
+
+            socket.emit("upload", file);
+
+            AddFileToHistory(file, true);
+        }
+
+        function AddFileToHistory(file, sent) {
+            const blob = new Blob([file.file]);
+            const url = URL.createObjectURL(blob);
+
+            let listFileElement = PresentFile(file.name, file.size, true, sent);
+
+            listFileElement.addEventListener('click', () => {
+                var downloadLink = document.createElement("a");
+                downloadLink.href = url;
+                downloadLink.download = file.name;
+               
+                downloadLink.click();
+            })
+
+            fileHistoryList.appendChild(listFileElement)
         }
 
         function PresentDevice(socketId, icon) {

@@ -49,7 +49,7 @@ io.on('connection', (socket) => {
 
     socket.on("upload", (info, callback) => {
         if(info.deviceList.length == 0)
-            io.sockets.in(socket.roomId).emit('receiveFile', file);
+            socket.to(socket.roomId).emit('receiveFile', info);
         else
         {
             Array.from(info.deviceList).forEach((socketId) => {
