@@ -257,6 +257,7 @@ body
     border: 1px solid rgb(158, 158, 158);
     border-radius: 5px;
     min-width: 200px;
+    overflow: hidden;
 }
 
 .file-icon
