@@ -13,6 +13,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Rubik:wght@300;400;500&display=swap"
         rel="stylesheet">
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <title>Emmet Drop - File transfer app</title>
 </head>
 
@@ -30,7 +31,7 @@
         <div class="link-related">
             <div class="qr link-related-item">
                 <div class="qr-header">Scan QR</div>
-                <img src="/images/code.jpg" width="128" height="128">
+                <div class="qr-code"></div>
             </div>
             <div class="separator">or</div>
             <div class="sharelink link-related-item">
@@ -296,6 +297,7 @@
         let link = document.getElementsByClassName('link')[0];
         let deviceList = document.getElementsByClassName('device-list')[0];
         let fileHistoryList = document.getElementsByClassName('file-list')[0];
+        let qrCode = document.getElementsByClassName("qr-code")[0];
 
         //If roomId hasn't been passed it means you are creating the room
         if (roomId.length < 8)
@@ -306,6 +308,16 @@
         socket.on('createRoomCallback', (msg) => {
             window.history.replaceState(null, null, "/c/" + msg.roomId); //Change url only visually in browser
             link.value = window.location.href;
+
+            qrCode.innerHTML = ""; //Clear qrcode
+            var code = new QRCode(qrCode, { //Generate qrcode
+                text: window.location.href,
+                width: 128,
+                height: 128,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H,
+            });
         })
 
         socket.on('joinRoomCallback', (msg) => {
