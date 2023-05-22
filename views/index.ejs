@@ -379,15 +379,15 @@
             const blob = new Blob([file.file]);
             const url = URL.createObjectURL(blob);
             Swal.fire({
-                title: 'Nowy plik!',
-                text: 'Chcesz pobrać plik ' + file.name + ' (' + FormatBytes(file.size) + ')?',
+                title: 'New file!',
+                text: 'Do you want to download ' + file.name + ' (' + FormatBytes(file.size) + ')?',
                 icon: 'info',
-                confirmButtonText: 'Pobierz',
-                cancelButtonText: 'Anuluj',
+                confirmButtonText: 'Download',
+                cancelButtonText: 'Cancel',
                 showCancelButton: true
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire('Pobrano!', '', 'success')
+                    Swal.fire('Downloaded!', '', 'success')
                     var downloadLink = document.createElement("a");
                     downloadLink.href = url;
                     downloadLink.download = file.name;
