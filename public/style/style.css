@@ -104,6 +104,7 @@ body
     max-height: 60px;
     padding: 0 !important;
     margin-top: 10px !important;
+    min-width: 250px !important;
 }
 
 .list-file .file-info
@@ -383,6 +384,7 @@ body
     .menu
     {
         width: 70%;
+        min-width: 280px;
     }
 
     body, .app, .link-related, .sharelink, .link-wrapper 
