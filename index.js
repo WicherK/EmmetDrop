@@ -4,7 +4,6 @@ const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
     maxHttpBufferSize: 50 * 1024 * 1024,
 });
-const fs = require('fs');
 
 app.set('views', __dirname + '/views');
 app.use(express.static('public'));
