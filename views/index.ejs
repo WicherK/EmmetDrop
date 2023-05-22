@@ -13,6 +13,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Rubik:wght@300;400;500&display=swap"
         rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <title>Emmet Drop - File transfer app</title>
 </head>
@@ -346,6 +347,7 @@
         socket.on('receiveFile', (msg) => {
             console.log('received');
             AddFileToHistory(msg, false);
+            ShowNewFileAlert(msg)
         })
 
         function Upload(files) {
@@ -371,6 +373,28 @@
             })
 
             fileHistoryList.appendChild(listFileElement)
+        }
+
+        function ShowNewFileAlert(file) {
+            const blob = new Blob([file.file]);
+            const url = URL.createObjectURL(blob);
+            Swal.fire({
+                title: 'Nowy plik!',
+                text: 'Chcesz pobrać plik ' + file.name + ' (' + FormatBytes(file.size) + ')?',
+                icon: 'info',
+                confirmButtonText: 'Pobierz',
+                cancelButtonText: 'Anuluj',
+                showCancelButton: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('Pobrano!', '', 'success')
+                    var downloadLink = document.createElement("a");
+                    downloadLink.href = url;
+                    downloadLink.download = file.name;
+
+                    downloadLink.click();
+                }
+            })
         }
 
         function PresentDevice(socketId, icon) {
