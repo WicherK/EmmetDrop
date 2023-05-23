@@ -6,7 +6,7 @@ body
     align-self: center;
     user-select: none;
     margin: 0;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 .mdi
@@ -71,6 +71,7 @@ body
     z-index: 2;
     opacity: 0;
     transition: all ease-in-out 0.2s;
+    overflow-y: scroll;
 }
 
 .file-history-header
