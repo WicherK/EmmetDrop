@@ -233,6 +233,10 @@
         })
 
         function PresentFile(name, size, isHistory = false, sent = null) {
+            //Main file element wrapper
+            let fileElementWrapper = document.createElement('div');
+            fileElementWrapper.className = 'file-wrapper';
+
             //Main file element
             let fileElement = document.createElement('div');
             fileElement.className = isHistory ? 'file list-file' : 'file';
@@ -262,6 +266,16 @@
                 fileDownloadElement.innerHTML = sent == true ? '<span class="mdi mdi-upload"></span>' : '<span class="mdi mdi-download"></span>';
             }
 
+            let closeButton = document.createElement('span');
+            closeButton.className = "mdi mdi-close-box";
+
+            closeButton.addEventListener('click', () => {
+                canUpload = false;
+                fileInput.value = '';
+                uploadButton.innerHTML = "Choose file";
+                document.getElementsByClassName('file-wrapper')[0].remove();
+            })
+
             //Build file element
             fileIcon.appendChild(icon);
             fileInfo.appendChild(fileName);
@@ -272,6 +286,13 @@
 
             if (sent != null)
                 fileElement.appendChild(fileDownloadElement);
+
+            if(!isHistory)
+            {
+                fileElementWrapper.appendChild(fileElement);
+                fileElementWrapper.appendChild(closeButton);
+                return fileElementWrapper;
+            }
 
             return fileElement;
         }
@@ -367,7 +388,7 @@
                 var downloadLink = document.createElement("a");
                 downloadLink.href = url;
                 downloadLink.download = file.name;
-               
+
                 downloadLink.click();
             })
 

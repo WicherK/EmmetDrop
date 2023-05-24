@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/c/:roomId?', (req, res) => {
-    if(rooms.includes(req.params.roomId))
+    if(rooms.includes(req.params.roomId.toString()))
         res.render("index", { roomId: req.params.roomId });
     else
         res.redirect('/');
