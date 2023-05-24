@@ -1,10 +1,12 @@
 const express = require('express');
+const compression = require('compression')
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http, {
     maxHttpBufferSize: 50 * 1024 * 1024,
 });
 
+app.use(compression())
 app.set('views', __dirname + '/views');
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
