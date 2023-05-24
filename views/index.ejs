@@ -46,6 +46,7 @@
         <div class="devices">
             <div class="devices-header">Available devices</div>
             <div class="device-list"></div>
+            <div class="discovered-device-list"></div>
         </div>
         <input type="file" id="FILE" hidden>
         <div class="upload-widgets">
@@ -317,8 +318,8 @@
 
         let link = document.getElementsByClassName('link')[0];
         let deviceList = document.getElementsByClassName('device-list')[0];
+        let discoveredDeviceList = document.getElementsByClassName('discovered-device-list')[0];
         let fileHistoryList = document.getElementsByClassName('file-list')[0];
-        let qrCode = document.getElementsByClassName("qr-code")[0];
 
         //If roomId hasn't been passed it means you are creating the room
         if (roomId.length < 8)
@@ -330,15 +331,7 @@
             window.history.replaceState(null, null, "/c/" + msg.roomId); //Change url only visually in browser
             link.value = window.location.href;
 
-            qrCode.innerHTML = ""; //Clear qrcode
-            var code = new QRCode(qrCode, { //Generate qrcode
-                text: window.location.href,
-                width: 128,
-                height: 128,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H,
-            });
+            GenerateQrCode()
         })
 
         socket.on('joinRoomCallback', (msg) => {
@@ -346,15 +339,7 @@
 
             link.value = window.location.href;
 
-            qrCode.innerHTML = ""; //Clear qrcode
-            var code = new QRCode(qrCode, { //Generate qrcode
-                text: window.location.href,
-                width: 128,
-                height: 128,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H,
-            });
+            GenerateQrCode();
 
             deviceList.innerHTML = '';
             Array.from(socketsInRoom).forEach((socketId) => {
@@ -364,11 +349,37 @@
             AssignDeviceListeners();
         })
 
+        socket.on('discoverCallback', (msg) => {
+            let discovered = msg.discovered;
+
+            discoveredDeviceList.innerHTML = '';
+
+            Array.from(discovered).forEach((socketId) => {
+                if (socketId != socket.id)
+                discoveredDeviceList.appendChild(PresentDevice(socketId, 'wifi'));
+            })
+            AssignDeviceListeners();
+        })
+
+
         socket.on('receiveFile', (msg) => {
             console.log('received');
             AddFileToHistory(msg, false);
             ShowNewFileAlert(msg)
         })
+
+        function GenerateQrCode(){
+            let qrCode = document.getElementsByClassName("qr-code")[0];
+            qrCode.innerHTML = ""; //Clear qrcode
+            var code = new QRCode(qrCode, { //Generate qrcode
+                text: window.location.href,
+                width: 128,
+                height: 128,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H,
+            });
+        }
 
         function Upload(files) {
             let file = { file: files[0], name: files[0].name, size: files[0].size, deviceList: checkedList };

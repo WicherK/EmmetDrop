@@ -35,15 +35,40 @@ io.on('connection', (socket) => {
         socket.join(roomId);
         socket.roomId = roomId;
         socket.emit("createRoomCallback", {roomId: roomId});
+        
+        let connectedClients = io.of('/').sockets;
+
+        connectedClients.forEach(client => {
+            let dicoveredClients = [];
+            connectedClients.forEach(client2 => {
+                if(client.handshake.address == client2.handshake.address && client.roomId != client2.roomId){
+                    dicoveredClients.push(client2.id)
+                }
+            })
+            io.to(client.id).emit('discoverCallback', {discovered: dicoveredClients})
+
+        });
+
     })
 
     socket.on('joinRoom', (msg) => {
         socket.join(msg.roomId);
         socket.roomId = msg.roomId;
 
-        //Send message to update devices list in room
         let socketsInRoom = Array.from(io.sockets.adapter.rooms.get(msg.roomId) || []);
         io.to(msg.roomId).emit('joinRoomCallback', { socketsInRoom: socketsInRoom });
+
+        let connectedClients = io.of('/').sockets;
+
+        connectedClients.forEach(client => {
+            let dicoveredClients = [];
+            connectedClients.forEach(client2 => {
+                if(client.handshake.address == client2.handshake.address && client.roomId != client2.roomId){
+                    dicoveredClients.push(client2.id)
+                }
+            })
+            io.to(client.id).emit('discoverCallback', {discovered: dicoveredClients})
+        });
     })
 
     socket.on("upload", (info, callback) => {
