@@ -25,6 +25,10 @@ body {
     pointer-events: none;
 }
 
+.mdi-clipboard-multiple, .mdi-check-bold {
+    pointer-events: none;
+}
+
 .menu-button {
     display: flex;
     justify-content: center;
@@ -238,8 +242,7 @@ body {
     transition: all ease-in-out 0.1s;
 }
 
-.mdi-close-box:hover
-{
+.mdi-close-box:hover {
     cursor: pointer;
     color: rgb(226, 36, 36);
 }
