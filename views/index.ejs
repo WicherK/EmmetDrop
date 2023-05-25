@@ -5,24 +5,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0">
+    <link rel="stylesheet" href="/style/rubik.css">
+    <link rel="stylesheet" href="/style/quicksand.css">
     <link rel="stylesheet" href="/style/style.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@7.2.96/css/materialdesignicons.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&family=Rubik:wght@300;400;500&display=swap"
-        rel="stylesheet">
     <script src="/js/sweetalert2.js"></script>
     <script src="/js/qrcode.min.js"></script>
     <title>Emmet Drop - File transfer app</title>
 </head>
 
 <body>
-    <div class="menu-button"><span class="mdi mdi-menu"></span></div>
+    <div class="menu-button"><span class="icon menu-icon"></span></div>
     <div class="curtain"></div>
     <div class="menu">
         <div class="file-history">
-            <div class="file-history-header"><span class="mdi mdi-history"></span>Files history</div>
+            <div class="file-history-header"><span class="icon history-icon"></span>Files history</div>
             <div class="file-list"></div>
         </div>
     </div>
@@ -38,15 +34,20 @@
                 <div class="sharelink-header">Link to share</div>
                 <div class="link-wrapper">
                     <input class="link" type="text" value="" readonly>
-                    <button class="link-button">Copy Link<span class="mdi mdi-clipboard-multiple"
-                            style="padding-left: 5px;"></span></button>
+                    <button class="link-button">Copy Link<span class="icon copy-icon"></span></button>
                 </div>
             </div>
         </div>
-        <div class="devices">
-            <div class="devices-header">Available devices</div>
-            <div class="device-list"></div>
-            <div class="discovered-device-list"></div>
+        <div class="devices-wrapper">
+            <div class="devices">
+                <div class="devices-header">Available devices</div>
+                <div class="device-list"></div>
+            </div>
+            <div class="devices discovered-devices" style="display: none;">
+                <div class="devices-header">Discovered devices</div>
+                <div class="device-list discovered-list"></div>
+                <div class="discovered-device-list"></div>
+            </div>
         </div>
         <input type="file" id="FILE" hidden>
         <div class="upload-widgets">
@@ -93,8 +94,8 @@
             e.target.style.borderColor = '#5ED865';
             e.target.style.padding = '0';
             e.target.style.paddingTop = '2px';
-            e.target.style.fontSize = '22px';
-            e.target.innerHTML = '<span class="mdi mdi-check-bold"></span>';
+            if(e.target.innerHTML != '<span class="icon check-bold-icon"></span>')
+                e.target.innerHTML = '<span class="icon check-bold-icon"></span>';
 
             copyLinkTimer = setTimeout(() => {
                 e.target.style.transition = 'background-color color ease-in-out 0.2s';
@@ -102,8 +103,7 @@
                 e.target.style.backgroundColor = 'buttonface';
                 e.target.style.border = '1px solid rgb(184, 184, 184)';
                 e.target.style.padding = '13px';
-                e.target.style.fontSize = '14px';
-                e.target.innerHTML = 'Copy Link<span class="mdi mdi-clipboard-multiple" style="padding-left: 5px;"></span>';
+                e.target.innerHTML = 'Copy Link<span class="icon copy-icon"></span>';
             }, 2500)
         }
 
@@ -145,8 +145,9 @@
                     if (pressDuration >= checkDuration) {
                         if (!checkMode) {
                             Array.from(devices).forEach((e) => {
-                                let checkbox = document.createElement("i");
-                                checkbox.className = "mdi mdi-checkbox-blank-outline";
+                                let checkbox = document.createElement("span");
+                                checkbox.className = 'icon checkbox-icon';
+                                checkbox.style.backgroundImage = "url(/icons/checkbox-blank-outline.svg)";
                                 e.prepend(checkbox);
                             })
                             checkMode = true;
@@ -163,15 +164,14 @@
         function CheckDevice(e) {
             if (checkMode && pressDuration < checkDuration) {
                 if (!checkedList.includes(e.target.id)) {
-                    e.target.childNodes[0].className = "mdi mdi-checkbox-marked";
+                    e.target.childNodes[0].style.backgroundImage = "url(/icons/checkbox-marked.svg)";
                     checkedList.push(e.target.id);
                 }
                 else {
-                    e.target.childNodes[0].className = "mdi mdi-checkbox-blank-outline";
+                    e.target.childNodes[0].style.backgroundImage = "url(/icons/checkbox-blank-outline.svg)";
                     checkedList.splice(checkedList.indexOf(e.target.id), 1);
                 }
             }
-            console.log(checkedList);
         }
 
         //Menu
@@ -189,7 +189,7 @@
 
         window.addEventListener('resize', () => {
             if (!isMenuOpen)
-                document.getElementsByClassName("menu")[0].style.right = "-" + document.getElementsByClassName("menu")[0].scrollWidth + "px";
+                document.getElementsByClassName("menu")[0].style.right = "-" + (document.getElementsByClassName("menu")[0].scrollWidth + 10) + "px";
         })
 
         function OpenMenu() {
@@ -198,12 +198,21 @@
             document.getElementsByClassName("menu")[0].style.opacity = "1";
             document.getElementsByClassName("menu")[0].style.transition = "all ease-in-out 0.2s";
             document.getElementsByClassName("menu")[0].style.right = "0px";
+            setTimeout(() => {
+                document.getElementsByClassName("menu")[0].style.transition = "none";
+                document.getElementsByClassName("curtain")[0].style.transition = "none";
+            }, 250)
         }
 
         function CloseMenu() {
             if (isMenuOpen) {
+                document.getElementsByClassName("menu")[0].style.transition = "all ease-in-out 0.2s";
+                document.getElementsByClassName("curtain")[0].style.transition = "all ease-in-out 0.2s";
                 document.getElementsByClassName("curtain")[0].style.display = "none";
-                document.getElementsByClassName("menu")[0].style.right = "-" + document.getElementsByClassName("menu")[0].scrollWidth + "px";
+                document.getElementsByClassName("menu")[0].style.right = "-" + (document.getElementsByClassName("menu")[0].scrollWidth + 10) + "px";
+                setTimeout(() => {
+                    document.getElementsByClassName("menu")[0].style.transition = "none";
+                }, 250)
                 isMenuOpen = false;
             }
         }
@@ -246,7 +255,7 @@
             let fileIcon = document.createElement('div');
             fileIcon.className = 'file-icon';
             let icon = document.createElement('span');
-            icon.className = 'mdi mdi-file-outline';
+            icon.className = 'file-outline-icon';
 
             //File info
             let fileInfo = document.createElement('div');
@@ -254,7 +263,13 @@
 
             let fileName = document.createElement('div');
             fileName.className = "file-name";
-            fileName.innerHTML = name;
+            if(name.length > 25)
+            {
+                let tempName = name.slice(0, 25) + "...";
+                fileName.innerHTML = tempName;
+            }
+            else
+                fileName.innerHTML = name;
 
             let fileSize = document.createElement('div');
             fileSize.className = 'file-size';
@@ -264,16 +279,16 @@
             let fileDownloadElement = document.createElement('div');
             if (isHistory && sent != null) {
                 fileDownloadElement.className = 'file-download';
-                fileDownloadElement.innerHTML = sent == true ? '<span class="mdi mdi-upload"></span>' : '<span class="mdi mdi-download"></span>';
+                fileDownloadElement.innerHTML = sent == true ? '<object class="status-icon" data="/icons/upload.svg" width="35"></object>' : '<object class="status-icon" data="/icons/download.svg" width="35"></object>';
             }
 
             let closeButton = document.createElement('span');
-            closeButton.className = "mdi mdi-close-box";
+            closeButton.className = 'close-box-icon';
 
             closeButton.addEventListener('click', () => {
                 canUpload = false;
                 fileInput.value = '';
-                uploadButton.innerHTML = "Choose file";
+                uploadButton.innerHTML = 'Choose file';
                 document.getElementsByClassName('file-wrapper')[0].remove();
             })
 
@@ -318,6 +333,7 @@
 
         let link = document.getElementsByClassName('link')[0];
         let deviceList = document.getElementsByClassName('device-list')[0];
+        let discoveredDevices = document.getElementsByClassName('discovered-devices')[0];
         let discoveredDeviceList = document.getElementsByClassName('discovered-device-list')[0];
         let fileHistoryList = document.getElementsByClassName('file-list')[0];
 
@@ -352,11 +368,14 @@
         socket.on('discoverCallback', (msg) => {
             let discovered = msg.discovered;
 
+            if(discovered.length != 0)
+                discoveredDevices.style.display = 'block';
+
             discoveredDeviceList.innerHTML = '';
 
             Array.from(discovered).forEach((socketId) => {
                 if (socketId != socket.id)
-                discoveredDeviceList.appendChild(PresentDevice(socketId, 'wifi'));
+                    discoveredDeviceList.appendChild(PresentDevice(socketId, 'wifi'));
             })
             AssignDeviceListeners();
         })
@@ -434,7 +453,8 @@
             deviceElement.id = socketId;
 
             let iconElement = document.createElement('span');
-            iconElement.className = `mdi mdi-${icon}`;
+            iconElement.className = `${icon}-icon`;
+            iconElement.style.backgroundImage = `url(/icons/${icon}.svg)`;
 
             deviceElement.appendChild(iconElement);
             deviceElement.innerHTML += socketId;

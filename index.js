@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/c/:roomId?', (req, res) => {
-    if(rooms.includes(req.params.roomId.toString()))
+    if(req.params.roomId != null && rooms.includes(req.params.roomId.toString()))
         res.render("index", { roomId: req.params.roomId });
     else
         res.redirect('/');
@@ -48,7 +48,6 @@ io.on('connection', (socket) => {
                 }
             })
             io.to(client.id).emit('discoverCallback', {discovered: dicoveredClients})
-
         });
 
     })

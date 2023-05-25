@@ -8,24 +8,58 @@ body {
     overflow: hidden;
 }
 
-.mdi-bluetooth,
-.mdi-wifi,
-.mdi-web {
-    padding-right: 5px;
-    margin-left: 20px;
-    font-size: 21px;
+.icon {
     pointer-events: none;
 }
 
-.mdi-checkbox-blank-outline,
-.mdi-checkbox-marked {
+.menu-icon {
+    width: 40px;
+    height: 40px;
+    background-image: url(/icons/menu.svg);
+    background-repeat: no-repeat;
+}
+
+.history-icon {
+    width: 34px;
+    height: 34px;
+    background-image: url(/icons/history.svg);
+    background-repeat: no-repeat;
+    padding-right: 10px;
+}
+
+.copy-icon {
+    width: 13px;
+    height: 13px;
+    background-image: url(/icons/clipboard-multiple.svg);
+    background-repeat: no-repeat;
+    margin-left: 5px;
+}
+
+.check-bold-icon {
+    width: 23px;
+    height: 23px;
+    background-image: url(/icons/check-bold.svg);
+    background-repeat: no-repeat;
+}
+
+.bluetooth-icon,
+.wifi-icon,
+.web-icon {
+    width: 22px;
+    height: 22px;
+    padding-right: 5px;
+    margin-left: 5px;
+    font-size: 21px;
+    pointer-events: none;
+    background-repeat: no-repeat;
+}
+
+.checkbox-icon {
+    width: 24px;
+    height: 24px;
     margin-left: 0;
     margin-right: 5px;
     font-size: 21px;
-    pointer-events: none;
-}
-
-.mdi-clipboard-multiple, .mdi-check-bold {
     pointer-events: none;
 }
 
@@ -40,9 +74,8 @@ body {
     margin-right: 15px;
     z-index: 0;
     border-radius: 100%;
-    padding-left: 5px;
-    padding-right: 5px;
     transition: all ease-in-out 0.2s;
+    padding: 5px;
 }
 
 .menu-button:hover {
@@ -101,6 +134,11 @@ body {
     min-width: 250px !important;
 }
 
+.list-file .file-outline-icon {
+    width: 42px !important;
+    height: 42px !important;
+}
+
 .list-file .file-info {
     width: 100%;
 }
@@ -115,6 +153,9 @@ body {
 }
 
 .file-download {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 28px;
     margin-left: 15px;
     margin-right: 20px;
@@ -175,6 +216,9 @@ body {
 }
 
 .link-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     min-width: 110px;
     padding: 13px;
     font-size: 14px;
@@ -189,6 +233,11 @@ body {
 .link-button:hover {
     cursor: pointer;
     background-color: rgb(218, 218, 218);
+}
+
+.devices-wrapper {
+    display: flex;
+    flex-direction: column;
 }
 
 .devices {
@@ -231,20 +280,27 @@ body {
     margin-top: 30px;
 }
 
-.mdi-close-box {
+.close-box-icon {
+    width: 27px;
+    height: 27px;
+    background-image: url("/icons/close-box.svg");
+    background-size: 100% 100%;
+    background-color: white;
     font-size: 28px;
     position: absolute;
     right: -12px;
     top: -12px;
     z-index: 1;
-    color: rgb(255, 87, 87);
-    background-color: white;
     transition: all ease-in-out 0.1s;
 }
 
-.mdi-close-box:hover {
+.close-box-icon:hover {
     cursor: pointer;
-    color: rgb(226, 36, 36);
+}
+
+.close-box-icon:hover~svg {
+    cursor: pointer;
+    fill: rgb(226, 36, 36);
 }
 
 .file {
@@ -259,8 +315,18 @@ body {
 }
 
 .file-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     font-size: 38px;
-    padding: 10px;
+    padding: 8px;
+}
+
+.file-outline-icon {
+    width: 48px;
+    height: 48px;
+    background-image: url(/icons/file-outline.svg);
+    background-repeat: no-repeat;
 }
 
 .file-info {
