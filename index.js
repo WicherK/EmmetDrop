@@ -38,18 +38,7 @@ io.on('connection', (socket) => {
         socket.roomId = roomId;
         socket.emit("createRoomCallback", {roomId: roomId});
         
-        let connectedClients = io.of('/').sockets;
-
-        connectedClients.forEach(client => {
-            let dicoveredClients = [];
-            connectedClients.forEach(client2 => {
-                if(client.handshake.address == client2.handshake.address && client.roomId != client2.roomId){
-                    dicoveredClients.push(client2.id)
-                }
-            })
-            io.to(client.id).emit('discoverCallback', {discovered: dicoveredClients})
-        });
-
+        DeviceDiscovery()
     })
 
     socket.on('joinRoom', (msg) => {
@@ -59,17 +48,7 @@ io.on('connection', (socket) => {
         let socketsInRoom = Array.from(io.sockets.adapter.rooms.get(msg.roomId) || []);
         io.to(msg.roomId).emit('joinRoomCallback', { socketsInRoom: socketsInRoom });
 
-        let connectedClients = io.of('/').sockets;
-
-        connectedClients.forEach(client => {
-            let dicoveredClients = [];
-            connectedClients.forEach(client2 => {
-                if(client.handshake.address == client2.handshake.address && client.roomId != client2.roomId){
-                    dicoveredClients.push(client2.id)
-                }
-            })
-            io.to(client.id).emit('discoverCallback', {discovered: dicoveredClients})
-        });
+        DeviceDiscovery()
     })
 
     socket.on("upload", (info, callback) => {
@@ -98,8 +77,23 @@ io.on('connection', (socket) => {
                 io.to(socket.roomId).emit('joinRoomCallback', { socketsInRoom: socketsInRoom });
             }
         })
+        DeviceDiscovery()
     });
 })
+
+function DeviceDiscovery(){
+    let connectedClients = io.of('/').sockets;
+
+    connectedClients.forEach(client => {
+        let dicoveredClients = [];
+        connectedClients.forEach(client2 => {
+            if(client.handshake.address == client2.handshake.address && client.roomId != client2.roomId){
+                dicoveredClients.push(client2.id)
+            }
+        })
+        io.to(client.id).emit('discoverCallback', {discovered: dicoveredClients})
+    });
+}
 
 function GenerateRandomRoomId() {
     let randomNum = Math.floor(Math.random() * 100000000);
