@@ -92,7 +92,7 @@
             copyText.setSelectionRange(0, 99999);
 
             document.execCommand("copy");
-            
+
             window.getSelection().removeAllRanges();
 
             e.target.style.transition = 'none';
@@ -166,7 +166,9 @@
 
             divElement.addEventListener("mouseleave", ResetDuration);
             divElement.addEventListener("mousedown", HandleMouseDown);
+            divElement.addEventListener("touchstart", HandleMouseDown);
             divElement.addEventListener("mouseup", HandleMouseUp);
+            divElement.addEventListener("touchend", HandleMouseUp);
         }
 
         function CheckDevice(e) {
