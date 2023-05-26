@@ -5,7 +5,7 @@ body {
     align-self: center;
     user-select: none;
     margin: 0;
-    overflow: hidden;
+    overflow-x: hidden;
 }
 
 * {
