@@ -100,7 +100,7 @@ body {
     position: absolute;
     right: 0;
     background-color: white;
-    height: 100vh;
+    height: 100%;
     width: 25%;
     z-index: 2;
     opacity: 0;
@@ -380,6 +380,7 @@ body {
     font-weight: 300;
     border-radius: 5px;
     transition: all ease-in-out 0.2s;
+    margin-bottom: 20px;
 }
 
 .upload-button:hover {
