@@ -97,6 +97,8 @@ function DeviceDiscovery(){
 
 function GenerateRandomRoomId() {
     let randomNum = Math.floor(Math.random() * 100000000);
+    while(randomNum.toString().length < 8)
+        randomNum = Math.floor(Math.random() * 100000000);
     return randomNum.toString();
 }
 

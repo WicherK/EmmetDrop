@@ -33,7 +33,7 @@
             <div class="sharelink link-related-item">
                 <div class="sharelink-header">Link to share</div>
                 <div class="link-wrapper">
-                    <input class="link" type="text" value="" readonly>
+                    <input id="link" class="link" type="text" value="" readonly>
                     <button class="link-button">Copy Link<span class="icon copy-icon"></span></button>
                 </div>
             </div>
@@ -85,7 +85,15 @@
         function CopyLink(e) {
             clearTimeout(copyLinkTimer);
 
-            navigator.clipboard.writeText(window.location.href);
+            //Copy link to clipboard
+            var copyText = document.getElementById("link");
+
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+
+            document.execCommand("copy");
+            
+            window.getSelection().removeAllRanges();
 
             e.target.style.transition = 'none';
             e.target.style.transition = 'background-color ease-in-out 0.1s';
