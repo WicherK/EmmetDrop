@@ -102,7 +102,7 @@
             e.target.style.borderColor = '#5ED865';
             e.target.style.padding = '0';
             e.target.style.paddingTop = '2px';
-            if(e.target.innerHTML != '<span class="icon check-bold-icon"></span>')
+            if (e.target.innerHTML != '<span class="icon check-bold-icon"></span>')
                 e.target.innerHTML = '<span class="icon check-bold-icon"></span>';
 
             copyLinkTimer = setTimeout(() => {
@@ -273,8 +273,7 @@
 
             let fileName = document.createElement('div');
             fileName.className = "file-name";
-            if(name.length > 25)
-            {
+            if (name.length > 25) {
                 let tempName = name.slice(0, 25) + "...";
                 fileName.innerHTML = tempName;
             }
@@ -313,8 +312,7 @@
             if (sent != null)
                 fileElement.appendChild(fileDownloadElement);
 
-            if(!isHistory)
-            {
+            if (!isHistory) {
                 fileElementWrapper.appendChild(fileElement);
                 fileElementWrapper.appendChild(closeButton);
                 return fileElementWrapper;
@@ -378,7 +376,9 @@
         socket.on('discoverCallback', (msg) => {
             let discovered = msg.discovered;
 
-            if(discovered.length != 0)
+            if (discovered.length == [])
+                discoveredDevices.style.display = 'none';
+            else
                 discoveredDevices.style.display = 'block';
 
             discoveredDeviceList.innerHTML = '';
@@ -397,7 +397,7 @@
             ShowNewFileAlert(msg)
         })
 
-        function GenerateQrCode(){
+        function GenerateQrCode() {
             let qrCode = document.getElementsByClassName("qr-code")[0];
             qrCode.innerHTML = ""; //Clear qrcode
             var code = new QRCode(qrCode, { //Generate qrcode
