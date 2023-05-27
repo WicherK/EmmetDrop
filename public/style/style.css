@@ -239,6 +239,16 @@ body {
     background-color: rgb(218, 218, 218);
 }
 
+.checked {
+    transition: none; 
+    transition: all ease-in-out 0.1s;
+    color: white;
+    background-color: #5ED865 !important;
+    border-color: #5ED865;
+    padding: 0;
+    padding-top: 2px;
+}
+
 .devices-wrapper {
     display: flex;
     flex-direction: column;
