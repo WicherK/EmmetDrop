@@ -108,6 +108,38 @@ body {
     overflow-y: scroll;
 }
 
+.user-info
+{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid rgb(211, 211, 211);
+}
+
+.avatar-icon
+{
+    padding: 10px;
+    padding-top: 20px;
+}
+
+.account-circle
+{
+    display: block;
+    width: 64px;
+    height: 64px;
+    background-image: url("/icons/account-circle.svg");
+    background-repeat: no-repeat;
+}
+
+.username
+{
+    font-size: 21px;
+    font-weight: 300;
+    padding-bottom: 20px;
+}
+
 .file-history-header {
     display: flex;
     align-items: center;
