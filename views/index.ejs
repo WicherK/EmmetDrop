@@ -100,22 +100,12 @@
 
             window.getSelection().removeAllRanges();
 
-            e.target.style.transition = 'none';
-            e.target.style.transition = 'background-color ease-in-out 0.1s';
-            e.target.style.color = 'white';
-            e.target.style.backgroundColor = '#5ED865';
-            e.target.style.borderColor = '#5ED865';
-            e.target.style.padding = '0';
-            e.target.style.paddingTop = '2px';
+            e.target.classList.add("checked");
             if (e.target.innerHTML != '<span class="icon check-bold-icon"></span>')
                 e.target.innerHTML = '<span class="icon check-bold-icon"></span>';
 
             copyLinkTimer = setTimeout(() => {
-                e.target.style.transition = 'background-color color ease-in-out 0.2s';
-                e.target.style.color = 'black';
-                e.target.style.backgroundColor = 'buttonface';
-                e.target.style.border = '1px solid rgb(184, 184, 184)';
-                e.target.style.padding = '13px';
+                e.target.classList.remove("checked");
                 e.target.innerHTML = 'Copy Link<span class="icon copy-icon"></span>';
             }, 2500)
         }
