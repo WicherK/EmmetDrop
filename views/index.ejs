@@ -177,6 +177,7 @@
                     checkedList.splice(checkedList.indexOf(e.target.id), 1);
                 }
             }
+            console.log(checkedList);
         }
 
         //Menu
@@ -335,6 +336,7 @@
         let roomId = "<%=roomId%>";
 
         let link = document.getElementsByClassName('link')[0];
+        let devicesElement = document.getElementsByClassName('devices')[0];
         let deviceList = document.getElementsByClassName('device-list')[0];
         let usernameElement = document.getElementsByClassName('username')[0];
         let discoveredDevices = document.getElementsByClassName('discovered-devices')[0];
@@ -350,7 +352,10 @@
         socket.on('createRoomCallback', (msg) => {
             window.history.replaceState(null, null, "/c/" + msg.roomId); //Change url only visually in browser
             link.value = window.location.href;
-
+            
+            //Hide devices because there is for sure no devices on creating room only owner is in
+            devicesElement.style.display = 'none';
+            
             //Set username in menu
             usernameElement.innerHTML = msg.username;
 
@@ -359,6 +364,11 @@
 
         socket.on('joinRoomCallback', (msg) => {
             let socketsInRoom = msg.socketsInRoom;
+
+            if (socketsInRoom.length == [])
+                devicesElement.style.display = 'none';
+            else
+                devicesElement.style.display = 'block';
 
             link.value = window.location.href;
 
@@ -392,8 +402,6 @@
 
 
         socket.on('receiveFile', (msg) => {
-            console.log('received');
-            AddFileToHistory(msg, false);
             ShowNewFileAlert(msg)
         })
 
@@ -453,6 +461,7 @@
                     downloadLink.download = file.name;
 
                     downloadLink.click();
+                    AddFileToHistory(msg, false);
                 }
             })
         }

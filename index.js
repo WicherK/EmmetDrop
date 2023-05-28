@@ -99,7 +99,7 @@ function DeviceDiscovery() {
         let dicoveredClients = [];
         connectedClients.forEach(client2 => {
             if (client.handshake.address == client2.handshake.address && client.roomId != client2.roomId) {
-                dicoveredClients.push(client2.id)
+                dicoveredClients.push({id: client2.id, username: client2.username})
             }
         })
         io.to(client.id).emit('discoverCallback', { discovered: dicoveredClients })
