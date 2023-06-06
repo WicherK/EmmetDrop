@@ -411,11 +411,17 @@ body {
 }
 
 .upload-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 110px;
     padding: 10px;
     padding-left: 20px;
     padding-right: 20px;
     font-size: 15px;
     color: white;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
     background-color: rgba(75, 75, 75, 0.9);
     border: none;
     font-family: 'Quicksand', sans-serif;

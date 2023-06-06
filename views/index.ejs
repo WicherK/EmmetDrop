@@ -63,7 +63,6 @@
     <script>
         let devices = document.getElementsByClassName('device');
         let copyLinkButton = document.getElementsByClassName('link-button')[0];
-        let copyLinkTimer;
 
         let checkMode = false;
         let pressDuration;
@@ -88,7 +87,6 @@
         copyLinkButton.addEventListener('click', CopyLink);
 
         function CopyLink(e) {
-            clearTimeout(copyLinkTimer);
 
             //Copy link to clipboard
             var copyText = document.getElementById("link");
@@ -99,17 +97,25 @@
             document.execCommand("copy");
 
             window.getSelection().removeAllRanges();
+            CheckAnimation(e);
 
+
+        }
+        function CheckAnimation(e){
+            let lastState = e.target.innerHTML;
+
+            if(lastState == '<span class="icon check-bold-icon"></span>'){
+                return;
+            }
             e.target.classList.add("checked");
             if (e.target.innerHTML != '<span class="icon check-bold-icon"></span>')
                 e.target.innerHTML = '<span class="icon check-bold-icon"></span>';
 
-            copyLinkTimer = setTimeout(() => {
+            setTimeout(() => {
                 e.target.classList.remove("checked");
-                e.target.innerHTML = 'Copy Link<span class="icon copy-icon"></span>';
+                e.target.innerHTML = lastState;
             }, 2500)
         }
-
         function AssignDeviceListeners() {
             //Check press
             Array.from(devices).forEach((e) => {
@@ -229,10 +235,12 @@
         let uploadButton = document.getElementsByClassName("upload-button")[0];
         let fileInput = document.getElementById('FILE');
 
-        uploadButton.addEventListener('click', () => {
+        uploadButton.addEventListener('click', (e) => {
             if (canUpload) {
                 //Send file to chosen users
                 Upload(files);
+                CheckAnimation(e);
+
             }
             else
                 fileInput.click();
